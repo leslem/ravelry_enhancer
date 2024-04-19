@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+  docs:
+    image: ravelry_enhancer_local_docs
+    container_name: ravelry_enhancer_local_docs
+    build:
+      context: .
+      dockerfile: ./compose/local/docs/Dockerfile
+    env_file:
+      - ./.envs/.local/.django
+    volumes:
+      - ./docs:/docs:z
+      - ./config:/app/config:z
+      - ./ravelry_enhancer:/app/ravelry_enhancer:z
+    ports:
+      - '9000:9000'
+    command: /start-docs
