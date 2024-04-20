@@ -48,3 +48,14 @@ Moved to [Live reloading and SASS compilation](https://cookiecutter-django.readt
 ## Deployment
 
 The following details how to deploy this application.
+
+
+## TODO
+
+- [ ] tool tracker (knitting needles, crochet hooks, looms, spindles, etc.)
+    - characteristics from the GSheet, but also notes, maybe to-do's
+    - management command to import data from the GSheet
+- [ ] rav connection
+    - pull projects, stash, queue
+- [ ] project summary builder (with fields from my template .md)
+- [ ] visualizations

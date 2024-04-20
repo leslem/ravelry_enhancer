@@ -119,6 +119,7 @@ CREATE USER ravelry_enhancer WITH PASSWORD '<password>' CREATEDB;
 ALTER ROLE ravelry_enhancer SET client_encoding TO 'utf8';
 ALTER ROLE ravelry_enhancer SET default_transaction_isolation TO 'read committed';
 ALTER ROLE ravelry_enhancer SET timezone TO 'UTC';
+CREATE DATABASE ravelry_enhancer WITH OWNER ravelry_enhancer;
 GRANT ALL PRIVILEGES ON DATABASE ravelry_enhancer TO ravelry_enhancer;
 
 # These additional steps required for postgres15 and up: https://stackoverflow.com/a/75876944
@@ -146,7 +147,6 @@ python manage.py migrate
 python manage.py runserver 0.0.0.0:8000
 ```
 
-
 ## Set up the git repo and push to GitHub
 ```
 pre-commit install
@@ -155,3 +155,18 @@ git branch -M main
 git remote add origin git@github.com:leslem/ravelry_enhancer.git
 git push -u origin main
 ```
+
+## Set up apps
+
+https://cookiecutter-django.readthedocs.io/en/latest/developing-locally.html#creating-your-first-django-app
+
+```
+python manage.py startapp tool_tracker
+mv tool_tracker ravelry_enhancer/
+
+python manage.py startapp core
+mv core ravelry_enhancer/
+```
+
+* Edit the app’s apps.py change name = '<name-of-the-app>' to name = '<django_project_root>.<name-of-the-app>'.
+* Register the new app by adding it to the LOCAL_APPS list in config/settings/base.py, integrating it as an official component of your project.
