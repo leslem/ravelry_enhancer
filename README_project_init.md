@@ -109,13 +109,12 @@ sudo port load postgresql16-server
 
 ```
 # Log into the server as admin
-createdb --username=postgres ravelry_enhancer
 # psql --username=postgres
 # create user leslie
 CREATE USER leslie WITH PASSWORD '<the usual>' CREATEDB;
-GRANT CREATE ON DATABASE ravelry_enhancer TO leslie;
+# GRANT CREATE ON DATABASE ravelry_enhancer TO leslie;
 
-CREATE USER ravelry_enhancer WITH PASSWORD '<password>' CREATEDB;
+CREATE USER ravelry_enhancer WITH PASSWORD 'rPb0hUBi01' CREATEDB;
 ALTER ROLE ravelry_enhancer SET client_encoding TO 'utf8';
 ALTER ROLE ravelry_enhancer SET default_transaction_isolation TO 'read committed';
 ALTER ROLE ravelry_enhancer SET timezone TO 'UTC';
@@ -136,13 +135,27 @@ ALTER DATABASE ravelry_enhancer OWNER TO ravelry_enhancer;
 python3.12 -m venv .venv
 .venv/bin/pip install -r requirements/local.txt
 echo "export DJANGO_READ_DOT_ENV_FILE=True" >> .venv/bin/activate
-echo "export DJANGO_SETTINGS_MODULE=local" >> .venv/bin/activate
+echo "export DJANGO_SETTINGS_MODULE=config.settings.local" >> .venv/bin/activate
 source .venv/bin/activate
 ```
+
+
+## Create a .env file and fill it in manually
+
+```
+env_text="DATABASE_URL=''
+DJANGO_SECRET_KEY=''
+"
+
+echo "$env_text" > .env
+```
+
 
 ## Check Django set up
 
 ```
+python manage.py makemigrations
+python manage.py showmigrations
 python manage.py migrate
 python manage.py runserver 0.0.0.0:8000
 ```
@@ -170,3 +183,5 @@ mv core ravelry_enhancer/
 
 * Edit the app’s apps.py change name = '<name-of-the-app>' to name = '<django_project_root>.<name-of-the-app>'.
 * Register the new app by adding it to the LOCAL_APPS list in config/settings/base.py, integrating it as an official component of your project.
+
+## Create admin user

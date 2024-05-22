@@ -56,6 +56,20 @@ The following details how to deploy this application.
     - characteristics from the GSheet, but also notes, maybe to-do's
     - management command to import data from the GSheet
 - [ ] rav connection
-    - pull projects, stash, queue
+    - pull projects
+    - pull stash
+    - pull queue
 - [ ] project summary builder (with fields from my template .md)
+- [ ] Custom views
+    - Queue
+        - Sort by age of stash
+        - Sort by yardage of stash
+        - Sort by age of pattern
+    - Stash by storage location
+    - Stash by color family
 - [ ] visualizations
+    - Yardage over time
+    - Projects over time
+    - Stash over time (in and out)
+    - Stash by color family
+    - Time from yarn purchase to cast on
