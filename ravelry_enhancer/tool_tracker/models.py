@@ -8,6 +8,8 @@ from core import utils
 
 # max_lengths: 100 for short names, 1000 for descriptions, none for comments
 
+INCH_TOLERANCE = 0.5
+
 # TODO: set type for each of the terminal models to a default value in custom save method
 
 
@@ -82,7 +84,7 @@ class CircularCord(models.Model):
         elif self.cord_length_cm is not None and self.cord_length_in is not None:
             in_diff = abs(utils.cm_to_in(self.cord_length_cm) - self.cord_length_in)
             # cm_diff = abs(utils.in_to_cm(self.cord_length_in) - self.cord_length_cm)
-            if in_diff > 0.5:
+            if in_diff > INCH_TOLERANCE:
                 raise ValidationError(
                     "cord length in inches %(in_value)s and centimeters %(cm_value)s don't agree",
                     params={"in_value": self.cord_length_in, "cm_value": self.cord_length_cm},
@@ -119,7 +121,7 @@ class NeedleTip(models.Model):
         elif self.tip_length_cm is not None and self.tip_length_in is not None:
             in_diff = abs(utils.cm_to_in(self.tip_length_cm) - self.tip_length_in)
             # cm_diff = abs(utils.in_to_cm(self.tip_length_in) - self.tip_length_cm)
-            if in_diff > 0.5:
+            if in_diff > INCH_TOLERANCE:
                 raise ValidationError(
                     "tip length in inches %(in_value)s and centimeters %(cm_value)s don't agree",
                     params={"in_value": self.tip_length_in, "cm_value": self.tip_length_cm},
@@ -129,7 +131,7 @@ class NeedleTip(models.Model):
 
 
 class Interchangeable(models.Model):
-    interchangeable_system = models.CharField(max_length=None)
+    interchangeable_system = models.CharField(max_length=100)
 
     class Meta:
         abstract = True
@@ -157,7 +159,7 @@ class KnittingNeedle(Tool):
         elif self.total_length_cm is not None and self.total_length_in is not None:
             in_diff = abs(utils.cm_to_in(self.total_length_cm) - self.total_length_in)
             # cm_diff = abs(utils.in_to_cm(self.total_length_in) - self.total_length_cm)
-            if in_diff > 0.5:
+            if in_diff > INCH_TOLERANCE:
                 raise ValidationError(
                     "Total length in inches %(in_value)s and centimeters %(cm_value)s don't agree",
                     params={"in_value": self.total_length_in, "cm_value": self.total_length_cm},
@@ -314,7 +316,7 @@ class CrochetHook(Tool):
         elif self.handle_length_cm is not None and self.handle_length_in is not None:
             in_diff = abs(utils.cm_to_in(self.handle_length_cm) - self.handle_length_in)
             # cm_diff = abs(utils.in_to_cm(self.handle_length_in) - self.handle_length_cm)
-            if in_diff > 0.5:
+            if in_diff > INCH_TOLERANCE:
                 raise ValidationError(
                     "handle length in inches %(in_value)s and centimeters %(cm_value)s don't agree",
                     params={"in_value": self.handle_length_in, "cm_value": self.handle_length_cm},
@@ -379,7 +381,7 @@ class Spindle(Tool):
         elif self.total_length_cm is not None and self.total_length_in is not None:
             in_diff = abs(utils.cm_to_in(self.total_length_cm) - self.total_length_in)
             # cm_diff = abs(utils.in_to_cm(self.total_length_in) - self.total_length_cm)
-            if in_diff > 0.5:
+            if in_diff > INCH_TOLERANCE:
                 raise ValidationError(
                     "Total length in inches %(in_value)s and centimeters %(cm_value)s don't agree",
                     params={"in_value": self.total_length_in, "cm_value": self.total_length_cm},
@@ -395,7 +397,7 @@ class Spindle(Tool):
         elif self.whorl_diameter_cm is not None and self.whorl_diameter_mm is not None:
             in_diff = abs(utils.cm_to_in(self.whorl_diameter_cm) - self.whorl_diameter_mm)
             # cm_diff = abs(utils.in_to_cm(self.whorl_diameter_mm) - self.whorl_diameter_cm)
-            if in_diff > 0.5:
+            if in_diff > INCH_TOLERANCE:
                 raise ValidationError(
                     "Whorl diameter in inches %(in_value)s and centimeters %(cm_value)s don't agree",
                     params={"in_value": self.whorl_diameter_mm, "cm_value": self.whorl_diameter_cm},
