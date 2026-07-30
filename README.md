@@ -54,7 +54,12 @@ The following details how to deploy this application.
 
 - [ ] tool tracker (knitting needles, crochet hooks, looms, spindles, etc.)
     - characteristics from the GSheet, but also notes, maybe to-do's
-    - management command to import data from the GSheet
+    - [X] models
+    - [ ] Add reeds and looms (I've saved some on Ravelry)
+    - [ ] create views (or all CRUD views, if very easy)
+    - [ ] Summary table views (using DT)
+    - [ ] management command to import data from the GSheet
+    - [ ] Custom filter views
 - [ ] rav connection
     - pull projects
     - pull stash

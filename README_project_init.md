@@ -89,14 +89,22 @@ cookiecutter-3.12 https://github.com/cookiecutter/cookiecutter-django
 
 ## Set up Postgres server
 
-- Make sure to click "allow" on the Settings popup that asks if it's ok for Terminal to control your computer. This is needed to create the postgres user properly.
-    - The first time I tried to use the Postgres server, it didn't work, and I think it was because I'd missed this prompt while running my `macports_install.sh` script.
-- The `postgresql16` port installs all of the necessary code, but the `postgresql16-server` portfile is just very short script that creates the postgres user and the `launchd` script that will be run by `port load`
-- [PostgreSQL 16 port](https://ports.macports.org/port/postgresql16-server/details/)
-- [MacPorts postgres server set up gist](https://gist.github.com/DrTom/4f2edcac26a0eae82360dbc9b18dd82c)
+- Make sure MacPorts postgres port is installed and startup item is loaded
 
 ```
-sudo port select postgresql postgresql16
+port install postgresql16 postgresql16-doc postgresql16-server
+port select --set postgresql postgresql16
+port load postgresql16-server
+```
+
+- Make sure to click "allow" on the Settings popup that asks if it's ok for Terminal to control your computer. This is needed to create the postgres user properly.
+    - The first time I tried to use the Postgres server, it didn't work, and I think it was because I'd missed this prompt while running my `macports_install.sh` script.
+- The `postgresql16` port installs all of the necessary code, but the `postgresql16-server` portfile is just a very short script that creates the postgres user and the `launchd` script that will be run by `port load`
+- [PostgreSQL 16 port](https://ports.macports.org/port/postgresql16-server/details/)
+- [MacPorts postgres server set up gist](https://gist.github.com/DrTom/4f2edcac26a0eae82360dbc9b18dd82c)
+- Go into system settings and create a new user named "postgres" (type standard), if needed
+
+```
 sudo mkdir -p /opt/local/var/db/postgresql16/defaultdb
 sudo chown postgres:postgres /opt/local/var/db/postgresql16/defaultdb
 sudo -u postgres /bin/sh -c 'cd /opt/local/var/db/postgresql16 &&
@@ -112,20 +120,21 @@ sudo port load postgresql16-server
 # psql --username=postgres
 # create user leslie
 CREATE USER leslie WITH PASSWORD '<the usual>' CREATEDB;
-# GRANT CREATE ON DATABASE ravelry_enhancer TO leslie;
-
 CREATE USER ravelry_enhancer WITH PASSWORD 'rPb0hUBi01' CREATEDB;
+
 ALTER ROLE ravelry_enhancer SET client_encoding TO 'utf8';
 ALTER ROLE ravelry_enhancer SET default_transaction_isolation TO 'read committed';
 ALTER ROLE ravelry_enhancer SET timezone TO 'UTC';
 CREATE DATABASE ravelry_enhancer WITH OWNER ravelry_enhancer;
-GRANT ALL PRIVILEGES ON DATABASE ravelry_enhancer TO ravelry_enhancer;
 
+\connect ravelry_enhancer;
+GRANT ALL PRIVILEGES ON DATABASE ravelry_enhancer TO ravelry_enhancer;
+GRANT ALL ON SCHEMA public to ravelry_enhancer;
 # These additional steps required for postgres15 and up: https://stackoverflow.com/a/75876944
 GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO ravelry_enhancer;
 GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO ravelry_enhancer;
 GRANT ALL ON SCHEMA public TO ravelry_enhancer;
-# This additional step required on top of that: https://stackoverflow.com/a/77289725
+<!-- # This additional step required on top of that: https://stackoverflow.com/a/77289725 -->
 ALTER DATABASE ravelry_enhancer OWNER TO ravelry_enhancer;
 ```
 
@@ -154,10 +163,15 @@ echo "$env_text" > .env
 ## Check Django set up
 
 ```
+# python manage.py reset_db # doesn't work
+python manage.py reset_db --noinput  # From django-extensions
+python manage.py dbshell  # make sure user is ravelry_enhancer with \conninfo
+ls ravelry_enhancer/*/migrations/00**.py
+rm ravelry_enhancer/*/migrations/00**.py
 python manage.py makemigrations
 python manage.py showmigrations
 python manage.py migrate
-python manage.py runserver 0.0.0.0:8000
+python manage.py runserver
 ```
 
 ## Set up the git repo and push to GitHub
@@ -185,3 +199,21 @@ mv core ravelry_enhancer/
 * Register the new app by adding it to the LOCAL_APPS list in config/settings/base.py, integrating it as an official component of your project.
 
 ## Create admin user
+
+```
+python manage.py createsuperuser
+```
+
+## Notes on coming back to project 2026-02-19
+
+- On new Mac so had to do a lot of set up over again
+- Reinstall all macports needed
+- Set up the postgres db again
+- Delete old .venv and recreate it
+- Reinstall all requirements again
+- Forgot to add the extras to end of .venv/bin/activate so it didn't have the proper db connection settings and manage.py didn't have enough permissions on the db
+
+## Checking back on 2026-07-30
+
+- Everything runs!
+- Got the project set up in Positron
