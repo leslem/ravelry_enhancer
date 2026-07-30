@@ -5,11 +5,11 @@ Following a suggestion from Two Scoops of Django 1.8.
 
 
 def in_to_cm(inches: float) -> float:
-    return inches / 2.54
+    return inches * 2.54
 
 
 def cm_to_in(centimeters: float) -> float:
-    return centimeters * 2.54
+    return centimeters / 2.54
 
 
 def g_to_oz(grams: float) -> float:
